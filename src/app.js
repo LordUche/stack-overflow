@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import logger from 'morgan';
+import compression from 'compression';
 import router from './routes';
 
 const app = express();
@@ -11,6 +12,7 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 if (process.env.NODE_ENV === 'development') app.use(logger('dev'));
+app.use(compression());
 
 app.use('', router);
 

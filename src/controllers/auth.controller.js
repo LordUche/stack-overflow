@@ -8,8 +8,8 @@ export const signUp = async (req, res, next) => {
     const user = await User.create({ email, password: hashSync(password, 10) });
 
     if (user) {
-      const token = jwt.sign(user, process.env.SECRET);
-      res.status(201).json({ user, token });
+      const token = jwt.sign(user.toJSON(), process.env.SECRET);
+      res.status(201).json({ ...user.toJSON(), token });
     } else {
       throw new Error('User does not exist.');
     }
@@ -25,7 +25,7 @@ export const signIn = async (req, res, next) => {
 
     if (user && compareSync(password, user.password)) {
       const token = jwt.sign({ email, id: user.id }, process.env.SECRET);
-      res.json({ user, token });
+      res.json({ ...user.toJSON(), token });
     } else {
       throw new Error('Invalid credentials.')
     }
